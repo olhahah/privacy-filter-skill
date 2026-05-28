@@ -14,19 +14,16 @@ This is one of two skills used together to ship meeting transcripts to a private
 ## Install
 
 ```bash
-mkdir -p ~/skills
-git clone https://github.com/olhahah/privacy-filter-skill ~/skills/privacy-filter
-
 mkdir -p ~/.claude/skills
-ln -s ~/skills/privacy-filter/skill ~/.claude/skills/privacy-filter
+git clone https://github.com/olhahah/privacy-filter-skill ~/.claude/skills/privacy-filter
 ```
 
-Three commands. The symlink means `git pull`-ing in `~/skills/privacy-filter` is enough to pick up new versions — no re-install step.
+One command. The clone lives directly where Claude Code expects skills — no symlinks, no extra source dir at `$HOME`.
 
 ## Update
 
 ```bash
-cd ~/skills/privacy-filter && git pull
+cd ~/.claude/skills/privacy-filter && git pull
 ```
 
 That's it. The skill is just a markdown file Claude reads — there's nothing to rebuild.
