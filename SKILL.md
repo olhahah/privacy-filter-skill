@@ -13,7 +13,7 @@ Reads a transcript and removes content that doesn't belong in a shared work cont
 2. **Background bleed** — lines from speakers clearly outside the meeting (someone walks past, off-topic chat picked up from another room). Cut when context makes this obvious.
 3. **Personal context inside work statements** — when a work fact is wrapped in personal explanation (e.g., "X was delayed because my wife is sick"), keep the work fact ("X was delayed") and drop the personal reason.
 
-The skill **never blocks**. It makes calls in the moment and lets the transcript through. Every removal goes to a rolling log file (`_logs/privacy-redactions.md` in the current directory) which the user reviews periodically. The user's yes/no decisions refine the skill over time.
+The skill **never blocks**. It makes calls in the moment and lets the transcript through. Every removal goes to a rolling log file the user reviews periodically. The user's yes/no decisions refine the skill over time. The log is written to a **local-only path outside any git repo** so its contents can never be committed — the calling skill says where; if nothing is specified, default to `~/.privacy-filter/redactions.md`. **Never write the log into a repo's working tree** — it holds the full quotes of everything removed.
 
 The skill does NOT extract entities, clean STT errors, or label speakers. Those are separate skills' jobs.
 
@@ -114,7 +114,7 @@ Redactions this run:
 
 ### 3. Log entries
 
-Append one entry per removal to `_logs/privacy-redactions.md` in the current working directory. Create the file and `_logs/` directory if missing. Format per entry:
+Append one entry per removal to the log path the calling skill specifies (e.g. the granola-share skill points it at `~/.granola-share/<repo-name>/privacy-redactions.md`). If no path is given, default to `~/.privacy-filter/redactions.md`. Create the file and its parent directory if missing. **Never write the log inside a git repo's working tree** — it holds the full removed quotes and must not be committed. Format per entry:
 
 ```markdown
 ## <date> — <transcript title>
@@ -144,4 +144,4 @@ Don't say "PII detected" — say what was actually there ("introduction chat", "
 
 ## Related files
 
-- **Redactions log** (created/appended at runtime): `_logs/privacy-redactions.md` in the current working directory.
+- **Redactions log** (created/appended at runtime, local-only — never inside a repo): path set by the calling skill, defaulting to `~/.privacy-filter/redactions.md`.
